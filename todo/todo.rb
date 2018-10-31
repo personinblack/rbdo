@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 # Copyright (c) 2018 personinblack <berkay@tuta.io>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software
@@ -17,22 +15,33 @@
 # DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative 'todo/todo'
-require_relative 'todo/todos'
 require 'date'
 
-todos = Todos.new
-todos.load("#{ENV['XDG_CONFIG_HOME']}/rbdo/data.yml")
+class Todo
+  def initialize(text, date)
+    unless text.instance_of?(String) && date.instance_of?(DateTime)
+      raise 'Invalid todo!'
+    end
+    @text = text
+    @date = date
+  end
 
-todos << Todo.new('Todo #1', DateTime.new(2077, 1, 1))
-todos << Todo.new('Todo #2', DateTime.new(2077, 1, 2))
-puts
+  def print(todos)
+    todos << {'text' => @text, 'date' => @date}
+  end
 
-todos.display
-puts
+  def load(todo_as_hash)
+    return Todo.new(todo_as_hash['text'], todo_as_hash['date'])
+  end
 
-todos.rm(1)
-todos.rm(0)
-puts
+  def display
+    remaining_days = (@date - DateTime.now).to_f
+    printf "#{@text} in #{remaining_days.to_i} days" \
+    " (#{@date.strftime('%d/%m/%Y %H:%M:%S')})"
 
-todos.save("#{ENV['XDG_CONFIG_HOME']}/rbdo/data.yml")
+    if remaining_days < 0
+      printf ' <I hope you didn\'t miss it...>'
+    end
+    puts
+  end
+end

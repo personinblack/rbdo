@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 # Copyright (c) 2018 personinblack <berkay@tuta.io>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software
@@ -17,22 +15,50 @@
 # DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-require_relative 'todo/todo'
-require_relative 'todo/todos'
-require 'date'
+require 'yaml'
+require 'pathname'
+require 'fileutils'
 
-todos = Todos.new
-todos.load("#{ENV['XDG_CONFIG_HOME']}/rbdo/data.yml")
+class Todos
+  def initialize
+    @todo_list = Array.new
+  end
 
-todos << Todo.new('Todo #1', DateTime.new(2077, 1, 1))
-todos << Todo.new('Todo #2', DateTime.new(2077, 1, 2))
-puts
+  def <<(todo)
+    @todo_list << todo
+    printf 'ADDED: '
+    todo.display
+  end
 
-todos.display
-puts
+  def rm(index)
+    printf 'DELETED: '
+    @todo_list.delete_at(index).display
+  end
 
-todos.rm(1)
-todos.rm(0)
-puts
+  def display
+    i = 0;
+    @todo_list.each do |todo|
+      printf("#{i.to_s}. ")
+      todo.display
+      i += 1
+    end
+  end
 
-todos.save("#{ENV['XDG_CONFIG_HOME']}/rbdo/data.yml")
+  def load(file_name)
+    loaded_data = YAML.load_file(file_name)
+    @todo_list = loaded_data unless !loaded_data.instance_of?(Array)
+  end
+
+  def save(file_name)
+    unless @todo_list.empty?
+      unless FileTest.exist?(file_name)
+        FileUtils.mkdir_p(Pathname.new(file_name).parent)
+        File.new(file_name, 'w+')
+      end
+
+      File.open(file_name, 'w+') do |file|
+        file.write(@todo_list.to_yaml)
+      end
+    end
+  end
+end
