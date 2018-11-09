@@ -24,7 +24,7 @@ require_relative 'todo/todo'
 require_relative 'todo/todos'
 require_relative 'command/command'
 require_relative 'command/command_add'
-require_relative 'command/command_rem'
+require_relative 'command/command_rm'
 require_relative 'command/command_ls'
 
 DEF_DATA_LOCATION = "#{ENV['XDG_CONFIG_HOME']}/rbdo/data.yml".freeze
