@@ -31,7 +31,7 @@ class ArgumentTime
   def parsed(date = ArgumentDate.new(nil))
     date = date.parsed
     return date unless @val.instance_of?(String) &&
-                       @val.match?(/^([0-9]){2}(:([0-9]){2}){1,2}$/)
+                       @val.match?(/^([0-9]){2}(:([0-9]){2}){0,2}$/)
 
     time_a = @val.split(':')
     Time.new(
