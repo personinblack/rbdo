@@ -22,21 +22,20 @@
 
 require_relative 'todo/todo'
 require_relative 'todo/todos'
+require_relative 'command/command'
+require_relative 'command/command_add'
+require_relative 'command/command_rem'
+require_relative 'command/command_ls'
 
 DEF_DATA_LOCATION = "#{ENV['XDG_CONFIG_HOME']}/rbdo/data.yml".freeze
 
 todos = Todos.new
 todos.load(DEF_DATA_LOCATION)
 
-todos << Todo.new('Todo #1', Time.new(2077, 1, 1))
-todos << Todo.new('Todo #2', Time.new(2077, 1, 2))
-puts
-
-todos.display
-puts
-
-todos.rm(1)
-todos.rm(0)
-puts
+command_add = CommandAdd.new(todos)
+todo = command_add.handle(ARGV)
+todos << todo if todo.instance_of?(Todo)
 
 todos.save(DEF_DATA_LOCATION)
+
+# TODO: return the help message if none of the commands handled the ARGV

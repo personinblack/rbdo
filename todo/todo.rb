@@ -22,27 +22,23 @@
 # todo.rb - todo
 #
 class Todo
-  def initialize(text, date)
-    unless text.instance_of?(String) && date.instance_of?(Time)
-      raise 'Invalid todo!'
-    end
-
+  def initialize(text, time)
     @text = text
-    @date = date
+    @time = time
   end
 
   def print(todos)
-    todos << { 'text' => @text, 'date' => @date }
+    todos << { 'text' => @text, 'time' => @time }
   end
 
   def load(todo_as_hash)
-    Todo.new(todo_as_hash['text'], todo_as_hash['date'])
+    Todo.new(todo_as_hash['text'], todo_as_hash['time'])
   end
 
   def display
-    remaining_days = (@date - Time.now).to_f
-    printf "#{@text} in #{remaining_days.to_i} days" \
-    " (#{@date.strftime('%d/%m/%Y %H:%M:%S')})"
+    remaining_days = (@time - Time.now).to_f
+    printf "#{@text} in #{remaining_days.to_i / 86_400} days" \
+    " (#{@time.strftime('%d/%m/%Y %H:%M:%S')})"
 
     printf ' <I hope you didn\'t miss it...>' if remaining_days < 0
     puts
