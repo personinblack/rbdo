@@ -27,10 +27,11 @@ class ArgumentDate
   end
 
   def parsed
-    return Time.now unless @val.instance_of?(String) &&
-                           @val.match?(%r{^([0-9]){2}/([0-9]){2}/([0-9]){4}$})
+    return Time.now unless
+      @val.instance_of?(String) &&
+      @val.match?(%r{^([0-9]){2}(/([0-9]){2}(/([0-9]){4}){0,1}){0,1}$})
 
     date_a = @val.split('/')
-    Time.new(date_a[2], date_a[1], date_a[0])
+    Time.new(date_a[2] || Time.now.year, date_a[1] || Time.now.month, date_a[0])
   end
 end
