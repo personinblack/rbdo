@@ -12,8 +12,7 @@
 
 ### .rm
 
-`./rbdo.rb rm 5`
-*5 is the index of the entry*
+`./rbdo.rb rm --index=5`
 
 ## arguments
 
@@ -34,3 +33,9 @@ date of the todo entry. (year and month are optional)
 time of the todo entry. (minute and second are optional)
 
 `./rbdo.rb add --text=todo --time=18:03:08`
+
+### --index
+
+index of the todo entry required for the rm command.
+
+`./rbdo.rb rm --index=5`
