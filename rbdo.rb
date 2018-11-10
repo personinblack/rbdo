@@ -30,13 +30,13 @@ require_relative 'command/command_ls'
 DEF_DATA_LOCATION = "#{ENV['XDG_CONFIG_HOME']}/rbdo/data.yml".freeze
 
 todos = Todos.new
-todos.load(DEF_DATA_LOCATION)
+todos.load!(DEF_DATA_LOCATION)
 
-commands = [CommandAdd.new(todos), CommandLS.new(todos)]
+commands = [CommandAdd.new(todos), CommandLS.new(todos), CommandRM.new(todos)]
 commands.each do |command|
   command.handle(ARGV)
 end
 
-todos.save(DEF_DATA_LOCATION)
+todos.save!(DEF_DATA_LOCATION)
 
 # TODO: return the help message if none of the commands handled the ARGV

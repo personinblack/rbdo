@@ -36,12 +36,20 @@ class Todos
     todo.display
   end
 
-  def rm(index)
+  def rm!(index)
+    @todo_list.fetch(index) do |i|
+      puts 'nothing to delete'
+      return
+    end
     printf 'DELETED: '
     @todo_list.delete_at(index).display
   end
 
   def display
+    if @todo_list.empty?
+      puts 'nothing to show'
+      return
+    end
     i = 0
     @todo_list.each do |todo|
       printf("#{i}. ")
@@ -50,16 +58,14 @@ class Todos
     end
   end
 
-  def load(file_name)
+  def load!(file_name)
     return false unless FileTest.exist?(file_name)
 
     loaded_data = YAML.load_file(file_name)
     @todo_list = loaded_data if loaded_data.instance_of?(Array)
   end
 
-  def save(file_name)
-    return false if @todo_list.empty?
-
+  def save!(file_name)
     unless FileTest.exist?(file_name)
       FileUtils.mkdir_p(Pathname.new(file_name).parent)
       File.new(file_name, 'w+')
@@ -68,5 +74,9 @@ class Todos
     File.open(file_name, 'w+') do |file|
       file.write(@todo_list.to_yaml)
     end
+  end
+
+  def size
+    @todo_list.size
   end
 end
