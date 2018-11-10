@@ -26,21 +26,21 @@ class Command
     @name = name
   end
 
-  def handle(command_arr)
-    name = Command.split_name(command_arr)
-    arguments = Command.split_arguments(command_arr)
+  def handle(argv)
+    name = Command.split_name(argv)
+    arguments = Command.split_arguments(argv)
     return arguments if name == @name
   end
 
-  def self.split_name(command_arr)
-    command_arr.each do |part|
+  def self.split_name(argv)
+    argv.each do |part|
       return part unless part.start_with?('--')
     end
   end
 
-  def self.split_arguments(command_arr)
+  def self.split_arguments(argv)
     arguments = {}
-    command_arr.each do |part|
+    argv.each do |part|
       next unless part.start_with?('--')
 
       argument = part[2, part.size]

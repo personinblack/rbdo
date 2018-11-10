@@ -33,12 +33,12 @@ class CommandAdd
     @command = Command.new('add')
   end
 
-  def handle(command_arr)
-    arguments = @command.handle(command_arr)
+  def handle(argv)
+    arguments = @command.handle(argv)
 
-    return false unless arguments.instance_of?(Hash)
+    return unless arguments.instance_of?(Hash)
 
-    Todo.new(
+    @todos << Todo.new(
       ArgumentText.new(arguments['text']).parsed,
       ArgumentTime.new(arguments['time']).parsed(
         ArgumentDate.new(arguments['date'])
