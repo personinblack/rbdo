@@ -33,8 +33,10 @@ class CommandRM
   def handle(argv)
     arguments = @command.handle(argv)
 
-    return unless arguments.instance_of?(Hash)
+    return false unless arguments.instance_of?(Hash)
 
-    @todos.rm!(ArgumentIndex.new(arguments['index'], @todos).parsed)
+    @todos.rm!(ArgumentIndex.new(arguments['index'].to_i, @todos).parsed)
+
+    true
   end
 end

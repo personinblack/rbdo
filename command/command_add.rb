@@ -36,7 +36,7 @@ class CommandAdd
   def handle(argv)
     arguments = @command.handle(argv)
 
-    return unless arguments.instance_of?(Hash)
+    return false unless arguments.instance_of?(Hash)
 
     @todos << Todo.new(
       ArgumentText.new(arguments['text']).parsed,
@@ -44,5 +44,7 @@ class CommandAdd
         ArgumentDate.new(arguments['date'])
       )
     )
+
+    true
   end
 end

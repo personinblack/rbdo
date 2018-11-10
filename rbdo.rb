@@ -34,8 +34,10 @@ todos.load!(DEF_DATA_LOCATION)
 
 commands = [CommandAdd.new(todos), CommandLS.new(todos), CommandRM.new(todos)]
 commands.each do |command|
-  command.handle(ARGV)
+  puts if command.handle(ARGV) && !command.is_a?(CommandLS)
 end
+
+todos.display
 
 todos.save!(DEF_DATA_LOCATION)
 

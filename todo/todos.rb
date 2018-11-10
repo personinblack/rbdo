@@ -37,24 +37,27 @@ class Todos
   end
 
   def rm!(index)
-    @todo_list.fetch(index) do |i|
+    @todo_list.fetch(index) do
       puts 'nothing to delete'
-      return
+      return false
     end
     printf 'DELETED: '
     @todo_list.delete_at(index).display
   end
 
   def display
+    return if @displayed
+
+    @displayed = true
+
     if @todo_list.empty?
       puts 'nothing to show'
       return
     end
-    i = 0
-    @todo_list.each do |todo|
+
+    @todo_list.each_with_index do |todo, i|
       printf("#{i}. ")
       todo.display
-      i += 1
     end
   end
 

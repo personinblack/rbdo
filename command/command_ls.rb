@@ -32,8 +32,10 @@ class CommandLS
   def handle(argv)
     arguments = @command.handle(argv)
 
-    return unless arguments.instance_of?(Hash)
+    return false unless arguments.instance_of?(Hash)
 
     @todos.display
+
+    true
   end
 end
