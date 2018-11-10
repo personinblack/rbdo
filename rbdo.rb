@@ -32,9 +32,10 @@ DEF_DATA_LOCATION = "#{ENV['XDG_CONFIG_HOME']}/rbdo/data.yml".freeze
 todos = Todos.new
 todos.load(DEF_DATA_LOCATION)
 
-command_add = CommandAdd.new(todos)
-todo = command_add.handle(ARGV)
-todos << todo if todo.instance_of?(Todo)
+commands = [CommandAdd.new(todos), CommandLS.new(todos)]
+commands.each do |command|
+  command.handle(ARGV)
+end
 
 todos.save(DEF_DATA_LOCATION)
 
