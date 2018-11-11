@@ -83,5 +83,9 @@ module RBDO
     def size
       @todo_list.size
     end
+
+    def empty?
+      @todo_list.empty?
+    end
   end
 end

@@ -55,7 +55,7 @@ module RBDO
     CommandHelp.new.handle(['help'])
     puts
   end
-  CommandLS.new(todos).handle(['ls']) unless todos.size < 1
+  CommandLS.new(todos).handle(['ls']) unless todos.empty?
 
   todos.save!(DEF_DATA_LOCATION)
 end
