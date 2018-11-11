@@ -34,7 +34,10 @@ module RBDO
   class Error < StandardError
   end
 
-  DEF_DATA_LOCATION = "#{ENV['XDG_CONFIG_HOME']}/rbdo/data.yml".freeze
+  CONFIG_DIR = ENV['XDG_CONFIG_HOME']
+  CONFIG_DIR = '~/.config'.freeze if CONFIG_DIR.nil?
+
+  DEF_DATA_LOCATION = "#{CONFIG_DIR}/rbdo/data.yml".freeze
 
   todos = Todos.new
   todos.load!(DEF_DATA_LOCATION)
