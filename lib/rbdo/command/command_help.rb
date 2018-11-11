@@ -18,6 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+require 'tty-markdown'
 require_relative 'command'
 
 module RBDO
@@ -32,9 +33,7 @@ module RBDO
     def handle(argv)
       return false unless @command.handle(argv).instance_of?(Hash)
 
-      puts <<~HELP
-        HELP?
-      HELP
+      puts TTY::Markdown.parse_file('README.md')
       true
     end
   end

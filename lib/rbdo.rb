@@ -39,14 +39,20 @@ module RBDO
   todos = Todos.new
   todos.load!(DEF_DATA_LOCATION)
 
+  handled = false
+
   [
     CommandAdd.new(todos), CommandLS.new(todos),
     CommandRM.new(todos), CommandHelp.new
   ].each do |command|
-    puts if command.handle(ARGV) && !command.is_a?(CommandLS)
+    if command.handle(ARGV)
+      handled = true
+      puts unless command.is_a?(CommandLS)
+    end
   end
 
-  todos.display
+  CommandHelp.new.handle(['help']) unless handled
+  CommandLS.new(todos).handle(['ls'])
 
   todos.save!(DEF_DATA_LOCATION)
 
