@@ -19,21 +19,34 @@
 # SOFTWARE.
 
 require_relative 'command'
+require_relative '../todo/todo'
+require_relative '../argument/argument_date'
+require_relative '../argument/argument_time'
+require_relative '../argument/argument_text'
 
-#
-# command_help.rb - command for showing off the usage
-#
-class CommandHelp
-  def initialize
-    @command = Command.new('help')
-  end
+module RBDO
+  #
+  # command_add.rb - command for adding todo entries to the todo list
+  #
+  class CommandAdd
+    def initialize(todos)
+      @todos = todos
+      @command = Command.new('add')
+    end
 
-  def handle(argv)
-    return false unless @command.handle(argv).instance_of?(Hash)
+    def handle(argv)
+      arguments = @command.handle(argv)
 
-    puts <<~HELP
-      HELP?
-    HELP
-    true
+      return false unless arguments.instance_of?(Hash)
+
+      @todos << Todo.new(
+        ArgumentText.new(arguments['text']).parsed,
+        ArgumentTime.new(arguments['time']).parsed(
+          ArgumentDate.new(arguments['date'])
+        )
+      )
+
+      true
+    end
   end
 end

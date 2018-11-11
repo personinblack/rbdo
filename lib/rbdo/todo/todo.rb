@@ -18,35 +18,31 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#
-# command.rb - cli command
-#
-class Command
-  def initialize(name)
-    @name = name
-  end
-
-  def handle(argv)
-    name = Command.split_name(argv)
-    arguments = Command.split_arguments(argv)
-    return arguments if name == @name
-  end
-
-  def self.split_name(argv)
-    argv.each do |part|
-      return part unless part.start_with?('--')
+module RBDO
+  #
+  # todo.rb - todo
+  #
+  class Todo
+    def initialize(text, time)
+      @text = text
+      @time = time
     end
-  end
 
-  def self.split_arguments(argv)
-    arguments = {}
-    argv.each do |part|
-      next unless part.start_with?('--')
-
-      argument = part[2, part.size]
-      arguments[argument.split('=')[0]] = argument.split('=')[1] unless
-        argument.empty?
+    def print(todos)
+      todos << { 'text' => @text, 'time' => @time }
     end
-    arguments
+
+    def load(todo_as_hash)
+      Todo.new(todo_as_hash['text'], todo_as_hash['time'])
+    end
+
+    def display
+      remaining_days = (@time - Time.now).to_f
+      printf "#{@text} in #{remaining_days.to_i / 86_400} days" \
+      " (#{@time.strftime('%d/%m/%Y %H:%M:%S')})"
+
+      printf ' <I hope you didn\'t miss it...>' if remaining_days < 0
+      puts
+    end
   end
 end

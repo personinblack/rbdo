@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Copyright (c) 2018 personinblack <berkay@tuta.io>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,24 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require_relative 'command'
+set -euo pipefail
+IFS=$'\n\t'
+set -vx
 
-#
-# command_ls.rb - command for listing todo entries
-#
-class CommandLS
-  def initialize(todos)
-    @todos = todos
-    @command = Command.new('ls')
-  end
-
-  def handle(argv)
-    arguments = @command.handle(argv)
-
-    return false unless arguments.instance_of?(Hash)
-
-    @todos.display
-
-    true
-  end
-end
+bundle install

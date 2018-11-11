@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 # Copyright (c) 2018 personinblack <berkay@tuta.io>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,28 +18,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require_relative 'todo/todo'
-require_relative 'todo/todos'
-require_relative 'command/command'
-require_relative 'command/command_add'
-require_relative 'command/command_rm'
-require_relative 'command/command_ls'
-require_relative 'command/command_help'
+module RBDO
+  #
+  # argument_text.rb - argument for validating texts
+  #
+  class ArgumentText
+    def initialize(val, default = 'unspecified')
+      @val = val
+      @default = default
+    end
 
-DEF_DATA_LOCATION = "#{ENV['XDG_CONFIG_HOME']}/rbdo/data.yml".freeze
-
-todos = Todos.new
-todos.load!(DEF_DATA_LOCATION)
-
-[
-  CommandAdd.new(todos), CommandLS.new(todos),
-  CommandRM.new(todos), CommandHelp.new
-].each do |command|
-  puts if command.handle(ARGV) && !command.is_a?(CommandLS)
+    def parsed
+      @val.nil? || @val.empty? ? @default : @val
+    end
+  end
 end
-
-todos.display
-
-todos.save!(DEF_DATA_LOCATION)
-
-# TODO: return the help message if none of the commands handled the ARGV

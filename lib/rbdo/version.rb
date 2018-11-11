@@ -18,16 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#
-# argument_text.rb - argument for validating texts
-#
-class ArgumentText
-  def initialize(val, default = 'unspecified')
-    @val = val
-    @default = default
-  end
-
-  def parsed
-    @val.nil? || @val.empty? ? @default : @val
-  end
+module RBDO
+  VERSION = '1.0.0'.freeze
 end

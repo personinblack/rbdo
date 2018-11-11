@@ -18,33 +18,37 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require_relative 'command'
-require_relative '../todo/todo'
-require_relative '../argument/argument_date'
-require_relative '../argument/argument_time'
-require_relative '../argument/argument_text'
+module RBDO
+  #
+  # command.rb - cli command
+  #
+  class Command
+    def initialize(name)
+      @name = name
+    end
 
-#
-# command_add.rb - command for adding todo entries to the todo list
-#
-class CommandAdd
-  def initialize(todos)
-    @todos = todos
-    @command = Command.new('add')
-  end
+    def handle(argv)
+      name = Command.split_name(argv)
+      arguments = Command.split_arguments(argv)
+      return arguments if name == @name
+    end
 
-  def handle(argv)
-    arguments = @command.handle(argv)
+    def self.split_name(argv)
+      argv.each do |part|
+        return part unless part.start_with?('--')
+      end
+    end
 
-    return false unless arguments.instance_of?(Hash)
+    def self.split_arguments(argv)
+      arguments = {}
+      argv.each do |part|
+        next unless part.start_with?('--')
 
-    @todos << Todo.new(
-      ArgumentText.new(arguments['text']).parsed,
-      ArgumentTime.new(arguments['time']).parsed(
-        ArgumentDate.new(arguments['date'])
-      )
-    )
-
-    true
+        argument = part[2, part.size]
+        arguments[argument.split('=')[0]] = argument.split('=')[1] unless
+          argument.empty?
+      end
+      arguments
+    end
   end
 end

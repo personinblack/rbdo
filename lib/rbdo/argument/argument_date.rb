@@ -18,21 +18,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#
-# argument_index.rb - argument for validating indexes
-#
-class ArgumentIndex
-  def initialize(val, todos, default = todos.size - 1)
-    @val = val
-    @todos = todos
-    @default = default
-  end
+module RBDO
+  #
+  # argument_date.rb - argument for parsing dates
+  #
+  class ArgumentDate
+    def initialize(val)
+      @val = val
+    end
 
-  def parsed
-    if @val.nil? || !@val.is_a?(Numeric) || @val > @todos.size - 1
-      @default
-    else
-      @val
+    def parsed
+      return Time.now unless
+        @val.instance_of?(String) &&
+        @val.match?(%r{^([0-9]){2}(/([0-9]){2}(/([0-9]){4}){0,1}){0,1}$})
+
+      date_a = @val.split('/')
+      Time.new(
+        date_a[2] || Time.now.year, date_a[1] || Time.now.month, date_a[0]
+      )
     end
   end
 end

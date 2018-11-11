@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 # Copyright (c) 2018 personinblack <berkay@tuta.io>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,25 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require_relative 'command'
-require_relative '../argument/argument_index'
+require 'bundler/setup'
+require 'rbdo'
+require 'irb'
 
-#
-# command_rm.rb - command for removing todo entries from the todo list
-#
-class CommandRM
-  def initialize(todos)
-    @todos = todos
-    @command = Command.new('rm')
-  end
-
-  def handle(argv)
-    arguments = @command.handle(argv)
-
-    return false unless arguments.instance_of?(Hash)
-
-    @todos.rm!(ArgumentIndex.new(arguments['index'].to_i, @todos).parsed)
-
-    true
-  end
-end
+IRB.start(__FILE__)

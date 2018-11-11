@@ -18,25 +18,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require_relative 'argument_date'
+require_relative 'command'
 
-#
-# argument_time.rb - argument for parsing times
-#
-class ArgumentTime
-  def initialize(val)
-    @val = val
-  end
+module RBDO
+  #
+  # command_help.rb - command for showing off the usage
+  #
+  class CommandHelp
+    def initialize
+      @command = Command.new('help')
+    end
 
-  def parsed(date = ArgumentDate.new(nil))
-    date = date.parsed
-    return date unless @val.instance_of?(String) &&
-                       @val.match?(/^([0-9]){2}(:([0-9]){2}){0,2}$/)
+    def handle(argv)
+      return false unless @command.handle(argv).instance_of?(Hash)
 
-    time_a = @val.split(':')
-    Time.new(
-      date.year.to_i, date.month.to_i, date.day.to_i,
-      time_a[0], time_a[1], time_a[2]
-    )
+      puts <<~HELP
+        HELP?
+      HELP
+      true
+    end
   end
 end

@@ -18,29 +18,37 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+require_relative 'rbdo/version'
+require_relative 'rbdo/todo/todo'
+require_relative 'rbdo/todo/todos'
+require_relative 'rbdo/command/command'
+require_relative 'rbdo/command/command_add'
+require_relative 'rbdo/command/command_rm'
+require_relative 'rbdo/command/command_ls'
+require_relative 'rbdo/command/command_help'
+
 #
-# todo.rb - todo
+# RBDO - main module
 #
-class Todo
-  def initialize(text, time)
-    @text = text
-    @time = time
+module RBDO
+  class Error < StandardError
   end
 
-  def print(todos)
-    todos << { 'text' => @text, 'time' => @time }
+  DEF_DATA_LOCATION = "#{ENV['XDG_CONFIG_HOME']}/rbdo/data.yml".freeze
+
+  todos = Todos.new
+  todos.load!(DEF_DATA_LOCATION)
+
+  [
+    CommandAdd.new(todos), CommandLS.new(todos),
+    CommandRM.new(todos), CommandHelp.new
+  ].each do |command|
+    puts if command.handle(ARGV) && !command.is_a?(CommandLS)
   end
 
-  def load(todo_as_hash)
-    Todo.new(todo_as_hash['text'], todo_as_hash['time'])
-  end
+  todos.display
 
-  def display
-    remaining_days = (@time - Time.now).to_f
-    printf "#{@text} in #{remaining_days.to_i / 86_400} days" \
-    " (#{@time.strftime('%d/%m/%Y %H:%M:%S')})"
+  todos.save!(DEF_DATA_LOCATION)
 
-    printf ' <I hope you didn\'t miss it...>' if remaining_days < 0
-    puts
-  end
+  # TODO: return the help message if none of the commands handled the ARGV
 end

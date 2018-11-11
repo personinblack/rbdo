@@ -22,64 +22,66 @@ require 'yaml'
 require 'pathname'
 require 'fileutils'
 
-#
-# todos.rb - todos
-#
-class Todos
-  def initialize
-    @todo_list = []
-  end
-
-  def <<(todo)
-    @todo_list << todo
-    printf 'ADDED: '
-    todo.display
-  end
-
-  def rm!(index)
-    @todo_list.fetch(index) do
-      puts 'nothing to delete'
-      return false
-    end
-    printf 'DELETED: '
-    @todo_list.delete_at(index).display
-  end
-
-  def display
-    return if @displayed
-
-    @displayed = true
-
-    if @todo_list.empty?
-      puts 'nothing to show'
-      return
+module RBDO
+  #
+  # todos.rb - todos
+  #
+  class Todos
+    def initialize
+      @todo_list = []
     end
 
-    @todo_list.each_with_index do |todo, i|
-      printf("#{i}. ")
+    def <<(todo)
+      @todo_list << todo
+      printf 'ADDED: '
       todo.display
     end
-  end
 
-  def load!(file_name)
-    return false unless FileTest.exist?(file_name)
-
-    loaded_data = YAML.load_file(file_name)
-    @todo_list = loaded_data if loaded_data.instance_of?(Array)
-  end
-
-  def save!(file_name)
-    unless FileTest.exist?(file_name)
-      FileUtils.mkdir_p(Pathname.new(file_name).parent)
-      File.new(file_name, 'w+')
+    def rm!(index)
+      @todo_list.fetch(index) do
+        puts 'nothing to delete'
+        return false
+      end
+      printf 'DELETED: '
+      @todo_list.delete_at(index).display
     end
 
-    File.open(file_name, 'w+') do |file|
-      file.write(@todo_list.to_yaml)
-    end
-  end
+    def display
+      return if @displayed
 
-  def size
-    @todo_list.size
+      @displayed = true
+
+      if @todo_list.empty?
+        puts 'nothing to show'
+        return
+      end
+
+      @todo_list.each_with_index do |todo, i|
+        printf("#{i}. ")
+        todo.display
+      end
+    end
+
+    def load!(file_name)
+      return false unless FileTest.exist?(file_name)
+
+      loaded_data = YAML.load_file(file_name)
+      @todo_list = loaded_data if loaded_data.instance_of?(Array)
+    end
+
+    def save!(file_name)
+      unless FileTest.exist?(file_name)
+        FileUtils.mkdir_p(Pathname.new(file_name).parent)
+        File.new(file_name, 'w+')
+      end
+
+      File.open(file_name, 'w+') do |file|
+        file.write(@todo_list.to_yaml)
+      end
+    end
+
+    def size
+      @todo_list.size
+    end
   end
 end
