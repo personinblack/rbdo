@@ -33,7 +33,7 @@ module RBDO
     def handle(argv)
       return false unless @command.handle(argv).instance_of?(Hash)
 
-      puts TTY::Markdown.parse_file('README.md')
+      puts TTY::Markdown.parse_file("#{__dir__}/../../../README.md")
       true
     end
   end
