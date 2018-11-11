@@ -51,7 +51,10 @@ module RBDO
     end
   end
 
-  CommandHelp.new.handle(['help']) unless handled
+  unless handled
+    CommandHelp.new.handle(['help'])
+    puts
+  end
   CommandLS.new(todos).handle(['ls'])
 
   todos.save!(DEF_DATA_LOCATION)
