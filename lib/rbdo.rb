@@ -58,6 +58,4 @@ module RBDO
   CommandLS.new(todos).handle(['ls'])
 
   todos.save!(DEF_DATA_LOCATION)
-
-  # TODO: return the help message if none of the commands handled the ARGV
 end
