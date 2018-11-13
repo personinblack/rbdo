@@ -10,7 +10,7 @@
 
 ### .ls
 
-`rbdo ls` or `rbdo ls --date=28/01/2019`
+`rbdo ls`
 
 ### .rm
 
