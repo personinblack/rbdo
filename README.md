@@ -20,7 +20,7 @@
 
 ### --text
 
-text/content of the todo entry.
+content of the todo entry.
 
 `rbdo add --text="netflix and chill"`
 
@@ -28,13 +28,13 @@ text/content of the todo entry.
 
 date of the todo entry. (year and month are optional)
 
-`rbdo ls --date=28/01/2019`
+`rbdo add --date=28/01/2019 --text="netflix and chill"`
 
 ### --time
 
 time of the todo entry. (minute and second are optional)
 
-`rbdo add --text=todo --time=18:03:08`
+`rbdo add --time=18:03:08 --text=todo`
 
 ### --index
 

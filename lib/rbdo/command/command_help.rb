@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require 'tty-markdown'
+require 'pastel'
 require_relative 'command'
 
 module RBDO
@@ -33,7 +33,41 @@ module RBDO
     def handle(argv)
       return false unless @command.handle(argv).instance_of?(Hash)
 
-      puts TTY::Markdown.parse_file("#{__dir__}/../../../README.md")
+      pastel = Pastel.new
+      header = pastel.bright_yellow.bold.underline.detach
+      section = pastel.bright_cyan.bold.detach
+      command = pastel.black.on_white.detach
+
+      puts <<~HELP
+        #{header['commands']}
+
+          #{section['.add']}
+          #{command['rbdo add --text="blah" --date=28/01/2019']}
+
+          #{section['.ls']}
+          #{command['rbdo ls']}
+
+          #{section['.rm']}
+          #{command['rbdo rm --index=5']}
+
+        #{header['arguments']}
+
+          #{section['--text']}
+          content of the todo entry. example:
+          #{command['rbdo add --text="blah"']}
+
+          #{section['--date']}
+          date of the todo entry (year and month are optional). example:
+          #{command['rbdo add --date=28/01/2019 --text="blah"']}
+
+          #{section['--time']}
+          time of the todo entry (minute and second are optional). example:
+          #{command['rbdo add --time=18:03:08 --text="blah"']}
+
+          #{section['--time']}
+          index of the todo entry required for the rm command. example:
+          #{command['rbdo rm --index=5']}
+      HELP
       true
     end
   end
